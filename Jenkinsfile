@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    parameters {
-        choice(name: "VM_CHOICE", choices: ["Linux VM","Windows VM"], description: "Select the VM type to import")
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -19,6 +16,13 @@ pipeline {
             }
         }
         stage('Terraform ') {
+            input {
+            message 'Please select the VM type to import'
+            ok 'Submit'
+            parameters {
+                choice(name: "VM_CHOICE", choices: ["Linux VM","Windows VM"], description: "Select the VM type to import")
+            }
+            }
             steps {
                 script {
                     withCredentials([azureServicePrincipal(credentialsId: 'Azure_credentials',
